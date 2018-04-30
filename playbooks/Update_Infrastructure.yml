@@ -1,0 +1,3 @@
+---
+- import_playbook: dmz_linux_update.yml
+- import_playbook: winupdate.yml

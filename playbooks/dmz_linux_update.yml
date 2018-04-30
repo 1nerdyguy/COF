@@ -1,0 +1,10 @@
+---
+- hosts: DMZ-Linux
+  become : yes
+
+  tasks:
+
+    - name: Update Package List
+      apt: update_cache=yes
+      when: ansible_os_family == 'Debian'
+

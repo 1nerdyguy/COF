@@ -1,0 +1,29 @@
+---
+
+- hosts: DMZ-Linux-Test 
+  sudo : yes
+
+  tasks:
+
+    - name: Update Package List
+      apt: update_cache=yes
+      when: ansible_os_family == 'Debian'
+
+    - name: Upgrade Packages
+      apt: upgrade=yes
+      when: ansible_os_family == 'Debian'
+
+    - name: Reboot server
+      shell: sleep 2 && /sbin/shutdown -r now "ansible system package upgrades" 
+      async: 1
+      poll: 0 
+      when: ansible_os_family == 'Debian'
+   
+    - name: Wait for server to come back
+      local_action: wait_for
+      args:	
+        host: "{{ inventory_hostname }}"
+        port: 22
+        state: started
+        delay: 30
+        timeout: 120
